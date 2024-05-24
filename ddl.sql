@@ -149,7 +149,7 @@ before insert on pelicula for each row
         set new.titulo_original = UPPER(new.titulo_original);
     end $$
 
-DELIMITER //
+
 Delimiter $$
 create trigger infoauditoria
 after update on pelicula
