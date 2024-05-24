@@ -9,7 +9,6 @@ VALUES
 INSERT INTO pais_peli (id_peli, pais_origen)
 VALUES
 (1, 'USA'),
-(1, 'UK'),
 (2, 'USA');
 
 

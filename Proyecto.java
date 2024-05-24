@@ -28,14 +28,14 @@ public class Proyecto {
             Scanner entrada = new Scanner(System.in);
 
             do {
-                System.out.println("1. Insertar un Cine");
-                System.out.println("2. Insertar una Sala en un Cine");
-                System.out.println("3. Listar todos los Cines con la informacion de sus Salas");
-                System.out.println("4. Salir");
-                System.out.print("Ingresa la opcion que desee: ");
+                System.out.println("1- Insertar un Cine");
+                System.out.println("2- Insertar una Sala en un Cine");
+                System.out.println("3- Listar todos los Cines con la informacion de sus Salas");
+                System.out.println("4- Salir");
+                System.out.print("Ingresa la opcion: ");
             
                 opcion = entrada.nextInt();
-                Scanner e = new Scanner(System.in);
+                Scanner lectura = new Scanner(System.in);
                 String consulta;
                 PreparedStatement enviador;
                 ResultSet resultado;
@@ -46,54 +46,71 @@ public class Proyecto {
                 int cant_butacas;
                 switch(opcion) {
                     case 1:
-                        System.out.print("Ingrese el nombre del cine: ");
-                        nombre_cine = e.nextLine();
-                        System.out.print("Ingrese el telefono del cine: ");
-                        telefono = e.nextLine();
-                        System.out.print("Ingrese la direccion del cine: ");
-                        direccion = e.nextLine();
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
+                        System.out.print("Nombre del cine: ");
+                        nombre_cine = lectura.nextLine();
+                        System.out.print("Telefono del cine: ");
+                        telefono = lectura.nextLine();
+                        System.out.print("Direccion del cine: ");
+                        direccion = lectura.nextLine();
 
                         consulta = "insert into proyecto.cine (nombre_cine, telefono, direccion) values ('" + nombre_cine + "', '" + telefono + "', '" + direccion + "')";
                         enviador = connection.prepareStatement(consulta);
                         enviador.executeUpdate();
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
                         break;
                     case 2:
-                        System.out.print("Ingrese el numero de la sala: ");
-                        numero_sala = e.nextInt();
-                        e.nextLine();
-                        System.out.print("Ingrese la cantidad de butacas de la sala: ");
-                        cant_butacas = e.nextInt();
-                        e.nextLine();
-                        System.out.print("Ingrese el cine al que pertenece la sala: ");
-                        nombre_cine = e.nextLine();
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
+                        System.out.println("Ingresando un nuevo cine: \n");
+                        System.out.print("Numero de sala: ");
+                        numero_sala = lectura.nextInt();
+                        lectura.nextLine();
+                        System.out.print("Cantidad de butacas: ");
+                        cant_butacas = lectura.nextInt();
+                        lectura.nextLine();
+                        System.out.print("Cine al que pertenece: ");
+                        nombre_cine = lectura.nextLine();
 
                         consulta = "insert into proyecto.sala (numero_sala, cant_butacas, nombre_cine) values (" + numero_sala + ", " + cant_butacas + ", '" + nombre_cine + "')";
                         enviador = connection.prepareStatement(consulta);
                         enviador.executeUpdate();
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
                         break;
                     case 3:
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
                         consulta = "select nombre_cine, numero_sala from proyecto.cine natural join proyecto.sala order by nombre_cine";
                         enviador = connection.prepareStatement(consulta);
                         resultado = enviador.executeQuery();
+                        System.out.println("Cines: \n");
                         while (resultado.next()) {
                             nombre_cine = resultado.getString("nombre_cine");
                             numero_sala = resultado.getInt("numero_sala");
-                            System.out.println("Cine: " + nombre_cine + " | Numero de Sala: " + numero_sala);
+                            System.out.println("- " + nombre_cine + " | Numero de Sala: " + numero_sala);
                         }
+                        System.out.println("\n");
                         break;
                     case 4:
-                        e.close();
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
                         System.out.println("Muchas gracias por usar este software");
+                        lectura.close();
                         break;
                     default:
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
                         System.out.println("Opción no existente, ingrese una opcion valida");
                 }
-            } while (opcion != 5);
+            } while (opcion != 4);
             entrada.close();
             connection.close();
 
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | SQLException lectura) {
+            lectura.printStackTrace();
         }
     }
 }
