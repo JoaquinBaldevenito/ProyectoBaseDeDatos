@@ -44,7 +44,7 @@ create table cine
 drop table if exists sala cascade;
 create table sala 
 (
-  numero_sala integer not null primary key,
+  numero_sala integer auto_increment not null primary key,
   cant_butacas integer,
   nombre_cine varchar(50),
   constraint fksala foreign key (nombre_cine) references cine (nombre_cine) ON DELETE CASCADE,
@@ -61,7 +61,8 @@ create table funcion
   id_peli integer,
   numero_sala integer,
   constraint fk_funcion1 foreign key (id_peli) references pelicula (id_peli)ON DELETE CASCADE,
-  constraint fk_funcion2 foreign key (numero_sala) references sala (numero_sala)ON DELETE CASCADE
+  constraint fk_funcion2 foreign key (numero_sala) references sala (numero_sala)ON DELETE CASCADE,
+  check (codigo > 0)
 );
 
 
@@ -128,5 +129,37 @@ create table actor_reparto
   constraint fkactor_reparto foreign key (nombre_persona_act) references actor (nombre_persona_act)ON DELETE CASCADE,
   constraint pkactor_reparto primary key (nombre_persona_act,id_peli)
 );
+
+drop table if exists auditoria;
+create table auditoria (
+	id_peli	integer,
+   	fecha_realizacion date,
+	hora_realizacion time,
+	f_estreno	date,
+	usuario text,
+
+	constraint pkauditoria primary key (id_peli, fecha_realizacion, hora_realizacion),
+	constraint fkauditoria_pelicula foreign key (id_peli) references pelicula (id_peli) on delete cascade on update cascade
+);
+
+Delimiter $$
+create trigger triggerMayuscula
+before insert on pelicula for each row
+    Begin 
+        set new.titulo_original = UPPER(new.titulo_original);
+    end $$
+
+DELIMITER //
+Delimiter $$
+create trigger infoauditoria
+after update on pelicula
+for each row
+begin
+    if new.fecha_estreno_arg <> old.fecha_estreno_arg then
+        insert into auditoria (id_peli, fecha_realizacion, hora_realizacion, f_estreno, usuario)
+        values (old.id_peli, now(), now(), new.fecha_estreno_arg, user());
+    end if;
+end $$
+
 
 
