@@ -133,7 +133,7 @@ create table actor_reparto
 drop table if exists auditoria;
 create table auditoria (
 	id_peli	integer,
-   	fecha_realizacion date,
+  fecha_realizacion date,
 	hora_realizacion time,
 	f_estreno	date,
 	usuario text,

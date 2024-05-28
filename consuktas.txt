@@ -1,0 +1,17 @@
+// muestra los actores que estuvieron en una sola pelicula
+select * from actor where cant_act = 1
+
+//dicta las personas que son actores y directores
+select * from actor natural join director
+
+//Lista los cines con la cantidad total de butacas
+select nombre_cine, direccion, telefono, sum(cant_butacas) as total_butacas from (cine natural join sala) group by nombre_cine
+
+//promedio de cantidad de butacas entre todas las salas
+select avg(cant_butacas) as total_butacas from (sala)
+
+//cuantas salas tiene cada cine
+select nombre_cine, count(cant_butacas) as cant_salas from (cine natural join sala) group by nombre_cine
+
+//peliculas que tienen una duracion mayor que la duracion promedio de todas las peliculas
+select titulo_distribucion, duracion from pelicula where duracion > (select avg(duracion) from pelicula)
